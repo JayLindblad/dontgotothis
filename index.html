@@ -836,6 +836,7 @@
         <div class="nope-title">okay, fair.</div>
         <p class="nope-text">You went to the website and still swiped left. That's kind of impressive. No hard feelings.</p>
         <button class="nope-btn" id="btn-reconsider">actually wait —</button>
+        <button class="match-skip" id="btn-nope-dismiss">no seriously, goodbye</button>
     </div>
 
     <!-- Match screen -->
@@ -1282,8 +1283,15 @@
         }
     });
 
+    function advanceFromJay() {
+        nopeScreen.classList.remove('visible');
+        matchScreen.classList.remove('visible');
+        advanceStack();
+    }
+
     document.getElementById('btn-reconsider').addEventListener('click', resetStack);
-    document.getElementById('btn-skip').addEventListener('click', () => matchScreen.classList.remove('visible'));
+    document.getElementById('btn-nope-dismiss').addEventListener('click', advanceFromJay);
+    document.getElementById('btn-skip').addEventListener('click', advanceFromJay);
 
     // ── Splash dismiss ─────────────────────────────────────────────
     setTimeout(() => {
