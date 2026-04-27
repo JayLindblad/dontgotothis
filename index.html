@@ -1200,7 +1200,7 @@
         } else {
             // Non-Jay cards (Gerald or end): advance stack and show toast
             const toastMsg = cardData.id === 'gerald'
-                ? `You swiped ${dir === 'right' ? 'right' : 'left'} on a cactus. Bold.`
+                ? (dir === 'right' ? 'You swiped right on a cactus. Bold.' : 'You missed a potential match.')
                 : '';
 
             advanceStack();
