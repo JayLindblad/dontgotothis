@@ -156,7 +156,8 @@
             border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
-        .bar-icon { font-size: 1.3em; opacity: 0.18; }
+        .bar-icon { font-size: 1.3em; opacity: 0.18; cursor: pointer; transition: opacity 0.2s; }
+        .bar-icon:hover { opacity: 0.35; }
 
         .app-logo {
             font-size: 1.2em;
@@ -594,6 +595,206 @@
         @keyframes drop {
             to { transform: translateY(110vh) rotate(760deg); opacity: 0; }
         }
+
+        /* ── Modals ──────────────────────────────────────── */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 28px 24px;
+            max-width: 360px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+            padding: 4px;
+        }
+
+        .modal-close:hover { color: #333; }
+
+        .modal-title {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #0f0f0f;
+            margin-bottom: 16px;
+            margin-top: 12px;
+        }
+
+        .modal-section {
+            margin-bottom: 20px;
+        }
+
+        .modal-section-title {
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .modal-bio {
+            font-size: 0.95em;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .interests-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .interest-tag {
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .modal-cta {
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 0.9em;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            transition: transform 0.15s;
+            width: 100%;
+        }
+
+        .modal-cta:hover { transform: scale(1.04); }
+
+        /* ── Comments section ────────────────────────────── */
+        .comments-container {
+            margin-top: 20px;
+        }
+
+        .comments-list {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        .comment {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9em;
+        }
+
+        .comment:last-child { border-bottom: none; }
+
+        .comment-name {
+            font-weight: 700;
+            color: #0f0f0f;
+            margin-bottom: 4px;
+        }
+
+        .comment-text {
+            color: #555;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .comment-time {
+            font-size: 0.75em;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comment-input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9em;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .comment-submit {
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: transform 0.15s;
+        }
+
+        .comment-submit:hover { transform: scale(1.02); }
+
+        .comment-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            color: #999;
+            font-size: 0.85em;
+            padding: 20px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -653,6 +854,58 @@
         </p>
         <a href="https://hinge.co" class="match-cta">Message me on Hinge →</a>
         <button class="match-skip" id="btn-skip">lol never mind</button>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('profile-modal')">✕</button>
+            <div class="modal-title">About Jay</div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Bio</div>
+                <div class="modal-bio" id="about-bio">
+                    [Your bio goes here — a bit more about yourself, what you're looking for, your vibe, etc.]
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Interests & Hobbies</div>
+                <div class="interests-list" id="interests-list">
+                    <span class="interest-tag">Coffee</span>
+                    <span class="interest-tag">Music</span>
+                    <span class="interest-tag">Dogs</span>
+                    <span class="interest-tag">[Add more]</span>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <button class="modal-cta" onclick="window.location.href='https://hinge.co'">
+                    Message me on Hinge →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div class="modal" id="comments-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('comments-modal')">✕</button>
+            <div class="modal-title">Messages</div>
+
+            <div class="comments-container">
+                <div class="comments-list" id="comments-list">
+                    <div class="loading">Loading comments...</div>
+                </div>
+
+                <div class="comment-form">
+                    <input type="text" id="comment-name" class="comment-input" placeholder="Your name">
+                    <textarea id="comment-message" class="comment-input" placeholder="Leave a message..." rows="4" style="resize: vertical;"></textarea>
+                    <button id="comment-submit" class="comment-submit">Post message</button>
+                </div>
+                <div id="comment-error" style="display: none;" class="error"></div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -1069,6 +1322,174 @@
             }, i * 20);
         }
     }
+
+    // ── Modal & Supabase Setup ─────────────────────────────────────
+    const SUPABASE_URL = 'https://egytzgvxseiguhcvmvdf.supabase.co';
+    const SUPABASE_KEY = '***REMOVED***.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVneXR6Z3Z4c2VpZ3VoY3ZtdmRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjk0ODgsImV4cCI6MjA5MjkwNTQ4OH0.ToludVmB4d462YxNTUXiMEirUYX1v1tca0hiqV-lnb8';
+
+    // ── Editable content (update these with your info) ──────────────
+    const PROFILE_BIO = '[Your bio goes here — a bit more about yourself, what you\'re looking for, your vibe, etc.]';
+    const PROFILE_INTERESTS = ['Coffee', 'Music', 'Dogs', 'Your interests here'];
+
+    // ── Modal controls ─────────────────────────────────────────────
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.add('open');
+        if (modalId === 'comments-modal') {
+            loadComments();
+        }
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.open').forEach(modal => {
+                modal.classList.remove('open');
+            });
+        }
+    });
+
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('open');
+            }
+        });
+    });
+
+    // ── Initialize profile modal ───────────────────────────────────
+    document.getElementById('about-bio').textContent = PROFILE_BIO;
+    const interestsList = document.getElementById('interests-list');
+    interestsList.innerHTML = PROFILE_INTERESTS.map(interest =>
+        `<span class="interest-tag">${interest}</span>`
+    ).join('');
+
+    // ── Supabase Comments ──────────────────────────────────────────
+    async function loadComments() {
+        const commentsList = document.getElementById('comments-list');
+        commentsList.innerHTML = '<div class="loading">Loading comments...</div>';
+
+        try {
+            const response = await fetch(
+                `${SUPABASE_URL}/rest/v1/comments?order=created_at.desc&limit=50`,
+                {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) throw new Error('Failed to load comments');
+
+            const comments = await response.json();
+
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<div class="loading">No comments yet. Be the first!</div>';
+            } else {
+                commentsList.innerHTML = comments.map(comment => `
+                    <div class="comment">
+                        <div class="comment-name">${escapeHtml(comment.name)}</div>
+                        <div class="comment-text">${escapeHtml(comment.message)}</div>
+                        <div class="comment-time">${formatTime(comment.created_at)}</div>
+                    </div>
+                `).join('');
+            }
+        } catch (error) {
+            console.error('Error loading comments:', error);
+            commentsList.innerHTML = '<div class="loading">Error loading comments</div>';
+        }
+    }
+
+    async function postComment() {
+        const name = document.getElementById('comment-name').value.trim();
+        const message = document.getElementById('comment-message').value.trim();
+        const errorDiv = document.getElementById('comment-error');
+        const submitBtn = document.getElementById('comment-submit');
+
+        errorDiv.style.display = 'none';
+
+        if (!name || !message) {
+            errorDiv.textContent = 'Please fill in your name and message';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        if (name.length > 100 || message.length > 500) {
+            errorDiv.textContent = 'Name too long (max 100) or message too long (max 500)';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        submitBtn.disabled = true;
+
+        try {
+            const response = await fetch(
+                `${SUPABASE_URL}/rest/v1/comments`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        message: message
+                    })
+                }
+            );
+
+            if (!response.ok) throw new Error('Failed to post comment');
+
+            document.getElementById('comment-name').value = '';
+            document.getElementById('comment-message').value = '';
+            await loadComments();
+        } catch (error) {
+            console.error('Error posting comment:', error);
+            errorDiv.textContent = 'Failed to post comment. Please try again.';
+            errorDiv.style.display = 'block';
+        } finally {
+            submitBtn.disabled = false;
+        }
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+
+        if (minutes < 1) return 'just now';
+        if (minutes < 60) return `${minutes}m ago`;
+        if (hours < 24) return `${hours}h ago`;
+        if (days < 7) return `${days}d ago`;
+        return date.toLocaleDateString();
+    }
+
+    // ── Top bar button handlers ────────────────────────────────────
+    const appBar = document.querySelector('.app-bar');
+    const barButtons = appBar.querySelectorAll('.bar-icon');
+
+    barButtons[0].addEventListener('click', () => openModal('profile-modal'));
+    barButtons[1].addEventListener('click', () => openModal('comments-modal'));
+
+    // ── Comments form submission ───────────────────────────────────
+    document.getElementById('comment-submit').addEventListener('click', postComment);
+    document.getElementById('comment-message').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            postComment();
+        }
+    });
 </script>
 </body>
 </html>
