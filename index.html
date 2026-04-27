@@ -5,80 +5,203 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>don't go to this</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        body {
+        html, body {
+            height: 100%;
+            overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f5f5f5;
+        }
+
+        /* ── Desktop background ──────────────────────────── */
+        body {
+            background: #0d0d18;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            top: -100px; left: -100px;
+            background: rgba(102, 126, 234, 0.12);
+        }
+
+        body::after {
+            bottom: -100px; right: -100px;
+            background: rgba(253, 41, 123, 0.12);
+        }
+
+        /* ── App frame ───────────────────────────────────── */
+        .app-frame {
+            position: relative;
+            z-index: 1;
+            width: 100vw;
             height: 100dvh;
+            background: #f7f7f8;
             display: flex;
             flex-direction: column;
-            align-items: center;
             overflow: hidden;
         }
 
-        /* Top bar */
+        @media (min-width: 600px) {
+            .app-frame {
+                width: 393px;
+                height: min(852px, calc(100vh - 40px));
+                border-radius: 52px;
+                border: 11px solid #111;
+                outline: 1.5px solid #2a2a2a;
+                box-shadow:
+                    0 50px 120px rgba(0,0,0,0.7),
+                    inset 0 0 0 1px rgba(255,255,255,0.04);
+            }
+        }
+
+        /* ── Splash ──────────────────────────────────────── */
+        #splash {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(155deg, #fd297b 0%, #ff5864 45%, #ff6036 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #splash.fade-out { opacity: 0; pointer-events: none; }
+
+        .splash-icon {
+            font-size: 4.5em;
+            margin-bottom: 18px;
+            display: block;
+            animation: splashIconIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                       heartbeat 1.6s ease-in-out 0.5s infinite;
+        }
+
+        @keyframes splashIconIn {
+            from { opacity: 0; transform: scale(0.4); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15%       { transform: scale(1.18); }
+            30%       { transform: scale(1); }
+            45%       { transform: scale(1.1); }
+            60%       { transform: scale(1); }
+        }
+
+        .splash-name {
+            color: white;
+            font-size: 2em;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            animation: riseUp 0.45s ease-out 0.2s both;
+        }
+
+        .splash-tagline {
+            color: rgba(255,255,255,0.65);
+            font-size: 0.9em;
+            font-style: italic;
+            margin-top: 6px;
+            margin-bottom: 52px;
+            animation: riseUp 0.45s ease-out 0.35s both;
+        }
+
+        @keyframes riseUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .splash-dots {
+            display: flex;
+            gap: 9px;
+            animation: riseUp 0.45s ease-out 0.5s both;
+        }
+
+        .splash-dots span {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            animation: dotPop 1.1s ease-in-out infinite;
+        }
+
+        .splash-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .splash-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotPop {
+            0%, 100% { transform: scale(0.7); opacity: 0.35; }
+            50%       { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* ── Top bar ─────────────────────────────────────── */
         .app-bar {
-            width: 100%;
-            max-width: 480px;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 24px;
+            padding: 16px 24px 12px;
             background: white;
-            border-bottom: 1px solid #eee;
-            flex-shrink: 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
+        .bar-icon { font-size: 1.3em; opacity: 0.18; }
+
         .app-logo {
-            font-size: 1.3em;
-            font-weight: 800;
+            font-size: 1.2em;
+            font-weight: 900;
             background: linear-gradient(135deg, #fd297b, #ff6036);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .bar-icon { font-size: 1.3em; opacity: 0.25; }
-
-        /* Card area */
+        /* ── Card area ───────────────────────────────────── */
         .card-area {
             flex: 1;
-            width: 100%;
-            max-width: 480px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 16px 20px 8px;
-            position: relative;
+            min-height: 0;
         }
 
         .card-stack {
             position: relative;
             width: 100%;
-            max-width: 360px;
+            max-width: 330px;
         }
 
-        /* Ghost cards behind */
         .ghost {
             position: absolute;
             inset: 0;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.35s ease;
         }
 
-        .ghost-1 { background: #e8e8e8; transform: scale(0.94) translateY(10px); z-index: 1; }
-        .ghost-2 { background: #f0f0f0; transform: scale(0.97) translateY(5px); z-index: 2; }
+        .ghost-1 { background: #d8d8d8; transform: scale(0.92) translateY(13px); z-index: 1; }
+        .ghost-2 { background: #e6e6e6; transform: scale(0.96) translateY(7px); z-index: 2; }
 
-        /* Profile card */
+        /* ── Profile card ────────────────────────────────── */
         .profile-card {
             position: relative;
             z-index: 10;
             width: 100%;
-            aspect-ratio: 3/4;
+            aspect-ratio: 5/7;
             background: white;
             border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
             overflow: hidden;
             cursor: grab;
             user-select: none;
@@ -90,113 +213,118 @@
 
         .card-photo {
             width: 100%;
-            height: 62%;
-            background: linear-gradient(145deg, #667eea 0%, #764ba2 60%, #fd297b 100%);
+            height: 60%;
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 55%, #fd297b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5em;
+            font-size: clamp(3em, 9vw, 5em);
             position: relative;
+        }
+
+        .photo-shine {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 55%);
         }
 
         .photo-fade {
             position: absolute;
             bottom: 0; left: 0; right: 0;
-            height: 80px;
+            height: 72px;
             background: linear-gradient(transparent, white);
         }
 
-        .card-info {
-            padding: 14px 18px 18px;
+        .card-info { padding: 12px 16px 16px; }
+
+        .card-name-row {
+            display: flex;
+            align-items: baseline;
+            gap: 7px;
+            margin-bottom: 3px;
         }
 
-        .card-name {
-            font-size: 1.55em;
-            font-weight: 800;
-            color: #111;
-        }
+        .card-name { font-size: 1.5em; font-weight: 800; color: #0f0f0f; }
+        .card-age  { font-size: 1.1em; font-weight: 400; color: #555; }
 
-        .card-name span {
-            font-weight: 400;
-            color: #666;
-            font-size: 0.75em;
-            margin-left: 6px;
-        }
-
-        .card-distance {
-            font-size: 0.82em;
+        .card-meta {
+            font-size: 0.79em;
             color: #999;
-            margin: 3px 0 10px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
+        }
+
+        .active-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #42d0f4;
+            flex-shrink: 0;
         }
 
         .card-bio {
-            font-size: 0.9em;
+            font-size: 0.87em;
             color: #444;
-            line-height: 1.45;
+            line-height: 1.48;
             margin-bottom: 10px;
         }
 
         .card-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 5px;
         }
 
         .tag {
-            background: #f5f5f5;
+            background: #f4f4f5;
             border-radius: 20px;
-            padding: 4px 11px;
-            font-size: 0.78em;
+            padding: 4px 10px;
+            font-size: 0.74em;
             color: #555;
-            white-space: nowrap;
         }
 
-        /* Stamps */
+        /* ── Stamps ──────────────────────────────────────── */
         .stamp {
             position: absolute;
-            top: 24px;
-            font-size: 2em;
+            top: 20px;
+            font-size: 1.75em;
             font-weight: 900;
             border: 4px solid;
             border-radius: 6px;
-            padding: 4px 14px;
+            padding: 4px 13px;
             opacity: 0;
             pointer-events: none;
             text-transform: uppercase;
             letter-spacing: 3px;
-            transition: opacity 0.05s;
             z-index: 20;
+            background: rgba(255,255,255,0.88);
         }
 
         .stamp-nope {
-            left: 20px;
+            left: 14px;
             color: #ff4b4b;
             border-color: #ff4b4b;
             transform: rotate(-20deg);
         }
 
         .stamp-like {
-            right: 20px;
+            right: 14px;
             color: #21d07a;
             border-color: #21d07a;
             transform: rotate(20deg);
         }
 
-        /* Action buttons */
+        /* ── Action bar ──────────────────────────────────── */
         .action-bar {
-            width: 100%;
-            max-width: 480px;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 18px;
-            padding: 12px 20px 28px;
+            padding: 12px 24px 28px;
             background: white;
-            border-top: 1px solid #eee;
-            flex-shrink: 0;
+            border-top: 1px solid rgba(0,0,0,0.06);
         }
 
         .action-btn {
@@ -207,217 +335,233 @@
             justify-content: center;
             cursor: pointer;
             background: white;
-            transition: transform 0.15s, box-shadow 0.15s;
+            transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s;
             flex-shrink: 0;
+            line-height: 1;
         }
 
-        .action-btn:hover { transform: scale(1.1); }
-        .action-btn:active { transform: scale(0.93); }
+        .action-btn:hover  { transform: scale(1.13); }
+        .action-btn:active { transform: scale(0.91); }
 
         .btn-nope {
-            width: 62px; height: 62px;
-            font-size: 1.7em;
+            width: 58px; height: 58px;
+            font-size: 1.55em;
             color: #ff4b4b;
-            border-color: #ffcccf;
-            box-shadow: 0 4px 16px rgba(255, 75, 75, 0.15);
+            border-color: #ffd0d0;
+            box-shadow: 0 4px 18px rgba(255,75,75,0.14);
         }
 
         .btn-star {
-            width: 50px; height: 50px;
-            font-size: 1.3em;
+            width: 46px; height: 46px;
+            font-size: 1.15em;
             color: #42d0f4;
-            border-color: #c3eefb;
-            box-shadow: 0 4px 16px rgba(66, 208, 244, 0.15);
+            border-color: #c5edf8;
+            box-shadow: 0 4px 14px rgba(66,208,244,0.14);
         }
 
         .btn-like {
-            width: 62px; height: 62px;
-            font-size: 1.7em;
+            width: 58px; height: 58px;
+            font-size: 1.55em;
             color: #21d07a;
-            border-color: #c0f0d8;
-            box-shadow: 0 4px 16px rgba(33, 208, 122, 0.15);
+            border-color: #bdf0d6;
+            box-shadow: 0 4px 18px rgba(33,208,122,0.14);
         }
 
-        /* Nope result screen */
-        .nope-screen {
-            position: fixed;
+        /* ── Overlay screens ─────────────────────────────── */
+        .overlay {
+            position: absolute;
             inset: 0;
-            background: #1a1a1a;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            z-index: 50;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
-            padding: 30px;
+            transition: opacity 0.35s ease;
+            padding: 28px 26px;
             text-align: center;
         }
 
-        .nope-screen.visible {
-            opacity: 1;
-            pointer-events: all;
-        }
+        .overlay.visible { opacity: 1; pointer-events: all; }
 
-        .nope-emoji { font-size: 4em; margin-bottom: 16px; }
+        /* Nope */
+        .nope-overlay { background: #111; }
+
+        .nope-emoji { font-size: 3.2em; margin-bottom: 14px; }
 
         .nope-title {
             color: white;
-            font-size: 2em;
+            font-size: 1.85em;
             font-weight: 800;
             margin-bottom: 10px;
         }
 
         .nope-text {
-            color: rgba(255,255,255,0.65);
-            font-size: 0.95em;
-            line-height: 1.5;
-            max-width: 280px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.88em;
+            line-height: 1.55;
+            max-width: 250px;
             margin-bottom: 30px;
         }
 
-        .reconsider-btn {
+        .nope-btn {
             background: white;
             color: #111;
             border: none;
-            padding: 14px 28px;
+            padding: 13px 26px;
             border-radius: 50px;
-            font-size: 0.95em;
+            font-size: 0.92em;
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.15s;
         }
 
-        .reconsider-btn:hover { transform: scale(1.05); }
+        .nope-btn:hover { transform: scale(1.05); }
 
-        /* Match screen */
-        .match-screen {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(145deg, #fd297b 0%, #ff6036 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s;
-            padding: 30px;
-            text-align: center;
+        /* Match */
+        .match-overlay {
+            background: linear-gradient(155deg, #fd297b 0%, #ff5864 45%, #ff6036 100%);
         }
 
-        .match-screen.visible {
-            opacity: 1;
-            pointer-events: all;
+        .match-eyebrow {
+            color: rgba(255,255,255,0.65);
+            font-size: 0.78em;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
 
         .match-title {
             color: white;
-            font-size: 2.8em;
+            font-size: 2.7em;
             font-weight: 900;
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
         }
 
         .match-sub {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.95em;
-            margin-bottom: 32px;
+            color: rgba(255,255,255,0.65);
+            font-size: 0.82em;
+            font-style: italic;
+            margin-bottom: 24px;
         }
 
         .match-avatars {
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 32px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .avatar {
-            width: 90px;
-            height: 90px;
+            width: 76px; height: 76px;
             border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.6);
+            border: 3px solid rgba(255,255,255,0.45);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5em;
+            font-size: 2em;
+            background: rgba(255,255,255,0.15);
         }
 
-        .avatar-you { background: rgba(255,255,255,0.2); }
         .avatar-me { background: linear-gradient(145deg, #667eea, #764ba2); }
 
-        .match-heart {
-            font-size: 1.8em;
-            animation: pulse 0.9s ease-in-out infinite;
+        .match-pulse {
+            font-size: 1.5em;
+            animation: matchPulse 0.85s ease-in-out infinite;
         }
 
-        @keyframes pulse {
+        @keyframes matchPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+            50%       { transform: scale(1.28); }
         }
 
-        .match-message {
+        .match-msg {
             color: white;
-            font-size: 0.98em;
-            line-height: 1.55;
-            max-width: 300px;
-            margin-bottom: 28px;
+            font-size: 0.88em;
+            line-height: 1.6;
+            max-width: 270px;
+            margin-bottom: 22px;
         }
 
         .match-cta {
             display: block;
             background: white;
             color: #fd297b;
-            padding: 15px 32px;
+            padding: 14px 28px;
             border-radius: 50px;
-            font-size: 1em;
-            font-weight: 700;
+            font-size: 0.93em;
+            font-weight: 800;
             text-decoration: none;
             box-shadow: 0 6px 24px rgba(0,0,0,0.2);
-            transition: transform 0.15s;
+            transition: transform 0.15s, box-shadow 0.15s;
+            margin-bottom: 10px;
         }
 
-        .match-cta:hover { transform: scale(1.05); }
+        .match-cta:hover {
+            transform: scale(1.04);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.28);
+        }
 
         .match-skip {
-            margin-top: 16px;
             background: none;
             border: none;
-            color: rgba(255,255,255,0.6);
-            font-size: 0.88em;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8em;
             cursor: pointer;
             text-decoration: underline;
+            padding: 4px;
         }
 
-        /* Confetti */
-        .confetti-piece {
+        /* ── Card animation ──────────────────────────────── */
+        .card-exit {
+            transition: transform 0.44s ease-in, opacity 0.4s ease-in !important;
+        }
+
+        @keyframes cardHint {
+            0%, 100% { transform: rotate(0deg) translateX(0); }
+            25%       { transform: rotate(-2.5deg) translateX(-8px); }
+            75%       { transform: rotate(2.5deg) translateX(8px); }
+        }
+
+        .hinting { animation: cardHint 0.65s ease-in-out; }
+
+        /* ── Confetti ────────────────────────────────────── */
+        .bit {
             position: fixed;
-            top: -12px;
+            top: -14px;
             border-radius: 2px;
-            animation: confetti-fall linear forwards;
-            z-index: 101;
+            animation: drop linear forwards;
+            z-index: 200;
+            pointer-events: none;
         }
 
-        @keyframes confetti-fall {
-            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* Card fly animation */
-        .flying {
-            transition: transform 0.45s ease-in, opacity 0.45s ease-in !important;
+        @keyframes drop {
+            to { transform: translateY(110vh) rotate(760deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
+<div class="app-frame">
 
+    <!-- Splash -->
+    <div id="splash">
+        <span class="splash-icon">💕</span>
+        <div class="splash-name">dontgotothis</div>
+        <div class="splash-tagline">swipe wisely.</div>
+        <div class="splash-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- Top bar -->
     <div class="app-bar">
         <span class="bar-icon">👤</span>
         <span class="app-logo">dontgotothis</span>
         <span class="bar-icon">💬</span>
     </div>
 
+    <!-- Cards -->
     <div class="card-area">
         <div class="card-stack">
             <div class="ghost ghost-1"></div>
@@ -429,19 +573,24 @@
 
                 <div class="card-photo">
                     😄
+                    <div class="photo-shine"></div>
                     <div class="photo-fade"></div>
                 </div>
 
                 <div class="card-info">
-                    <div class="card-name">Jay <span>· 2 miles away</span></div>
-                    <div class="card-distance">
-                        <span>✓</span> Recently active
+                    <div class="card-name-row">
+                        <span class="card-name">Jay</span>
+                        <span class="card-age">27</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="active-dot"></span>
+                        Recently active · 2 miles away
                     </div>
                     <div class="card-bio">
-                        Put a URL in my Hinge bio and you actually typed it in. So. Here we are. Hi.
+                        Put a URL in my Hinge bio and you actually typed it in.<br>So. Here we are. Hi.
                     </div>
                     <div class="card-tags">
-                        <span class="tag">☕ Coffee drinker</span>
+                        <span class="tag">☕ Coffee person</span>
                         <span class="tag">😂 Accidentally funny</span>
                         <span class="tag">🎵 Music nerd</span>
                         <span class="tag">🐶 Dog person</span>
@@ -451,161 +600,161 @@
         </div>
     </div>
 
+    <!-- Action buttons -->
     <div class="action-bar">
         <button class="action-btn btn-nope" id="btn-nope">✕</button>
         <button class="action-btn btn-star" id="btn-star">★</button>
         <button class="action-btn btn-like" id="btn-like">♥</button>
     </div>
 
-    <!-- Nope result -->
-    <div class="nope-screen" id="nope-screen">
+    <!-- Nope screen -->
+    <div class="overlay nope-overlay" id="nope-screen">
         <div class="nope-emoji">😅</div>
-        <div class="nope-title">okay fair enough</div>
-        <p class="nope-text">
-            You went to the website and still swiped left. That's actually kind of impressive. No hard feelings.
-        </p>
-        <button class="reconsider-btn" onclick="reset()">actually wait —</button>
+        <div class="nope-title">okay, fair.</div>
+        <p class="nope-text">You went to the website and still swiped left. That's kind of impressive. No hard feelings.</p>
+        <button class="nope-btn" id="btn-reconsider">actually wait —</button>
     </div>
 
-    <!-- Match result -->
-    <div class="match-screen" id="match-screen">
-        <div class="match-title">It's a Match!</div>
-        <div class="match-sub">okay you went to the website AND swiped right, so</div>
-
+    <!-- Match screen -->
+    <div class="overlay match-overlay" id="match-screen">
+        <div class="match-eyebrow">it's a</div>
+        <div class="match-title">Match! 🎉</div>
+        <div class="match-sub">you went to the website AND swiped right, so</div>
         <div class="match-avatars">
-            <div class="avatar avatar-you">👤</div>
-            <div class="match-heart">❤️</div>
+            <div class="avatar">👤</div>
+            <div class="match-pulse">❤️</div>
             <div class="avatar avatar-me">😄</div>
         </div>
-
-        <p class="match-message">
-            You typed a random URL from someone's Hinge profile and then swiped right on their fake dating card.<br><br>That's either very sweet or very chaotic. Either way, let's actually talk.
+        <p class="match-msg">
+            You typed a random URL from a Hinge profile and swiped right on their fake card.<br><br>
+            That's chaotic and adorable. Let's actually talk.
         </p>
-
         <a href="https://hinge.co" class="match-cta">Message me on Hinge →</a>
-        <button class="match-skip" onclick="document.getElementById('match-screen').classList.remove('visible')">
-            lol never mind
-        </button>
+        <button class="match-skip" id="btn-skip">lol never mind</button>
     </div>
 
-    <script>
-        const card = document.getElementById('card');
-        const stampNope = document.getElementById('stamp-nope');
-        const stampLike = document.getElementById('stamp-like');
-        const matchScreen = document.getElementById('match-screen');
-        const nopeScreen = document.getElementById('nope-screen');
+</div>
+<script>
+    // ── Splash dismiss ────────────────────────────────────────────
+    const splash = document.getElementById('splash');
+    const card   = document.getElementById('card');
 
-        let startX = 0, startY = 0, dx = 0;
-        let dragging = false;
+    setTimeout(() => {
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.remove();
+            // subtle hint wiggle so user knows the card is swipeable
+            card.classList.add('hinting');
+            card.addEventListener('animationend', () => card.classList.remove('hinting'), { once: true });
+        }, 580);
+    }, 2600);
 
-        function px(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
-        function py(e) { return e.touches ? e.touches[0].clientY : e.clientY; }
+    // ── Swipe logic ───────────────────────────────────────────────
+    const stampNope  = document.getElementById('stamp-nope');
+    const stampLike  = document.getElementById('stamp-like');
+    const matchScreen = document.getElementById('match-screen');
+    const nopeScreen  = document.getElementById('nope-screen');
 
-        card.addEventListener('mousedown', e => { dragging = true; startX = px(e); startY = py(e); card.style.transition = 'none'; });
-        card.addEventListener('touchstart', e => { dragging = true; startX = px(e); startY = py(e); card.style.transition = 'none'; }, { passive: true });
+    let sx = 0, sy = 0, dx = 0, dy = 0, dragging = false;
 
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('touchmove', drag, { passive: true });
+    const cx = e => e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e => e.touches ? e.touches[0].clientY : e.clientY;
 
-        function drag(e) {
-            if (!dragging) return;
-            dx = px(e) - startX;
-            const dy = py(e) - startY;
-            const rotate = dx * 0.07;
-            card.style.transform = `translateX(${dx}px) translateY(${dy * 0.1}px) rotate(${rotate}deg)`;
+    card.addEventListener('mousedown',  e => { dragging = true; sx = cx(e); sy = cy(e); card.style.transition = 'none'; });
+    card.addEventListener('touchstart', e => { dragging = true; sx = cx(e); sy = cy(e); card.style.transition = 'none'; }, { passive: true });
 
-            const ratio = Math.min(Math.abs(dx) / 90, 1);
-            stampNope.style.opacity = dx < 0 ? ratio : 0;
-            stampLike.style.opacity = dx > 0 ? ratio : 0;
-        }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchmove', onMove, { passive: true });
 
-        document.addEventListener('mouseup', release);
-        document.addEventListener('touchend', release);
+    function onMove(e) {
+        if (!dragging) return;
+        dx = cx(e) - sx;
+        dy = cy(e) - sy;
+        card.style.transform = `translateX(${dx}px) translateY(${dy * 0.12}px) rotate(${dx * 0.06}deg)`;
+        const r = Math.min(Math.abs(dx) / 75, 1);
+        stampNope.style.opacity = dx < -8 ? r : 0;
+        stampLike.style.opacity = dx >  8 ? r : 0;
+    }
 
-        function release() {
-            if (!dragging) return;
-            dragging = false;
-            card.style.transition = '';
+    document.addEventListener('mouseup',  release);
+    document.addEventListener('touchend', release);
 
-            if (dx > 90) { fly('right'); }
-            else if (dx < -90) { fly('left'); }
-            else {
-                card.style.transform = '';
-                stampNope.style.opacity = 0;
-                stampLike.style.opacity = 0;
-            }
-            dx = 0;
-        }
+    function release() {
+        if (!dragging) return;
+        dragging = false;
+        card.style.transition = '';
 
-        function fly(dir) {
-            card.classList.add('flying');
-            if (dir === 'right') {
-                card.style.transform = 'translateX(160vw) rotate(28deg)';
-                stampLike.style.opacity = 1;
-                card.style.opacity = '0';
-                setTimeout(showMatch, 450);
-            } else {
-                card.style.transform = 'translateX(-160vw) rotate(-28deg)';
-                stampNope.style.opacity = 1;
-                card.style.opacity = '0';
-                setTimeout(showNope, 450);
-            }
-        }
-
-        function showMatch() {
-            matchScreen.classList.add('visible');
-            confetti();
-        }
-
-        function showNope() {
-            nopeScreen.classList.add('visible');
-        }
-
-        function reset() {
-            nopeScreen.classList.remove('visible');
-            card.classList.remove('flying');
+        if      (dx >  90) fly('right');
+        else if (dx < -90) fly('left');
+        else {
             card.style.transform = '';
-            card.style.opacity = '';
             stampNope.style.opacity = 0;
             stampLike.style.opacity = 0;
-            dx = 0;
         }
+        dx = 0; dy = 0;
+    }
 
-        function confetti() {
-            const colors = ['#fd297b', '#ff6036', '#21d07a', '#42d0f4', '#ffd700', '#a855f7'];
-            for (let i = 0; i < 70; i++) {
-                setTimeout(() => {
-                    const el = document.createElement('div');
-                    el.className = 'confetti-piece';
-                    el.style.cssText = `
-                        left: ${Math.random() * 100}vw;
-                        width: ${Math.random() * 8 + 6}px;
-                        height: ${Math.random() * 8 + 6}px;
-                        background: ${colors[Math.floor(Math.random() * colors.length)]};
-                        animation-duration: ${Math.random() * 2 + 2}s;
-                        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
-                    `;
-                    document.body.appendChild(el);
-                    setTimeout(() => el.remove(), 4500);
-                }, i * 25);
-            }
-        }
-
-        document.getElementById('btn-nope').addEventListener('click', () => {
+    function fly(dir) {
+        card.classList.add('card-exit');
+        if (dir === 'right') {
+            stampLike.style.opacity = 1;
+            card.style.transform = 'translateX(160vw) rotate(28deg)';
+        } else {
             stampNope.style.opacity = 1;
-            setTimeout(() => fly('left'), 80);
-        });
+            card.style.transform = 'translateX(-160vw) rotate(-28deg)';
+        }
+        card.style.opacity = '0';
+        setTimeout(() => dir === 'right' ? showMatch() : showNope(), 440);
+    }
 
-        document.getElementById('btn-like').addEventListener('click', () => {
-            stampLike.style.opacity = 1;
-            setTimeout(() => fly('right'), 80);
-        });
+    function showMatch() {
+        matchScreen.classList.add('visible');
+        confetti();
+    }
 
-        document.getElementById('btn-star').addEventListener('click', () => {
-            stampLike.style.opacity = 1;
-            setTimeout(() => fly('right'), 80);
-        });
-    </script>
+    function showNope() {
+        nopeScreen.classList.add('visible');
+    }
 
+    function reset() {
+        nopeScreen.classList.remove('visible');
+        card.classList.remove('card-exit');
+        card.style.cssText = '';
+        stampNope.style.opacity = 0;
+        stampLike.style.opacity = 0;
+        dx = 0; dy = 0;
+    }
+
+    // Buttons
+    document.getElementById('btn-nope').addEventListener('click', () => { stampNope.style.opacity = 1; setTimeout(() => fly('left'),  55); });
+    document.getElementById('btn-like').addEventListener('click', () => { stampLike.style.opacity = 1; setTimeout(() => fly('right'), 55); });
+    document.getElementById('btn-star').addEventListener('click', () => { stampLike.style.opacity = 1; setTimeout(() => fly('right'), 55); });
+    document.getElementById('btn-reconsider').addEventListener('click', reset);
+    document.getElementById('btn-skip').addEventListener('click', () => matchScreen.classList.remove('visible'));
+
+    // ── Confetti ──────────────────────────────────────────────────
+    function confetti() {
+        const colors = ['#fd297b','#ff6036','#21d07a','#42d0f4','#ffd700','#a855f7','#fff'];
+        const frame  = document.querySelector('.app-frame');
+        const { left, width } = frame.getBoundingClientRect();
+
+        for (let i = 0; i < 80; i++) {
+            setTimeout(() => {
+                const el = document.createElement('div');
+                el.className = 'bit';
+                const s = Math.random() * 9 + 5;
+                el.style.cssText = `
+                    left:${left + Math.random() * width}px;
+                    width:${s}px; height:${s}px;
+                    background:${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius:${Math.random() > 0.45 ? '50%' : '2px'};
+                    animation-duration:${Math.random() * 2.5 + 2}s;
+                `;
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 5000);
+            }, i * 20);
+        }
+    }
+</script>
 </body>
 </html>
