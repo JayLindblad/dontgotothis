@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>don't go to this</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #667eea;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #999;
+            font-size: 1em;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .warning-box {
+            background: #fff5f0;
+            border-left: 4px solid #ff6b6b;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+
+        .warning-box h2 {
+            color: #ff6b6b;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+
+        .reasons {
+            list-style: none;
+            margin: 0;
+        }
+
+        .reasons li {
+            padding: 8px 0;
+            color: #333;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .reasons li:before {
+            content: "❌ ";
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+
+        .plot-twist {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .plot-twist h2 {
+            color: #667eea;
+            font-size: 1.05em;
+            margin-bottom: 8px;
+        }
+
+        .plot-twist p {
+            color: #333;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            display: block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            text-align: center;
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .warning-box {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ don't go to this</h1>
+        <p class="subtitle">(seriously, you've been warned)</p>
+
+        <div class="warning-box">
+            <h2>Here's why you should leave:</h2>
+            <ul class="reasons">
+                <li>I once tried to make quiche and the smoke alarm went off three times</li>
+                <li>My idea of "assembling IKEA furniture" is opening the box, looking at the instructions, and ordering takeout instead</li>
+                <li>I laugh at my own jokes approximately 4 seconds too late</li>
+            </ul>
+        </div>
+
+        <div class="plot-twist">
+            <h2>... But wait</h2>
+            <p>I'm genuinely looking for cool people to hang with. Apparently my Hinge profile needs <em>context</em> to be taken seriously. So here you go.</p>
+        </div>
+
+        <p style="text-align: center; color: #333; margin-bottom: 20px;">
+            If you're still here and haven't run away, you're either very brave or very bored. Either way, let's be friends?
+        </p>
+
+        <a href="https://hinge.co" class="cta-button">Message me on Hinge →</a>
+
+        <p class="footer-text">This site exists because my friends said I needed a personality. You're welcome.</p>
+    </div>
+</body>
+</html>
