@@ -171,6 +171,7 @@
         .card-area {
             flex: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 16px 20px 8px;
@@ -181,24 +182,17 @@
             position: relative;
             width: 100%;
             max-width: 330px;
+            height: 100%;
+            max-height: 570px;
+            align-self: stretch;
         }
 
-        .ghost {
+        /* ── Profile card ────────────────────────────────– */
+        .profile-card {
             position: absolute;
             inset: 0;
-            border-radius: 16px;
-            transition: transform 0.35s ease;
-        }
-
-        .ghost-1 { background: #d8d8d8; transform: scale(0.92) translateY(13px); z-index: 1; }
-        .ghost-2 { background: #e6e6e6; transform: scale(0.96) translateY(7px); z-index: 2; }
-
-        /* ── Profile card ────────────────────────────────── */
-        .profile-card {
-            position: relative;
-            z-index: 10;
             width: 100%;
-            aspect-ratio: 5/7;
+            height: 100%;
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06);
@@ -207,14 +201,19 @@
             user-select: none;
             touch-action: none;
             will-change: transform;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .profile-card:active { cursor: grabbing; }
 
+        .profile-card.is-end { cursor: default; }
+        .profile-card.is-end:active { cursor: default; }
+
         .card-photo {
             width: 100%;
-            height: 60%;
-            background: linear-gradient(145deg, #667eea 0%, #764ba2 55%, #fd297b 100%);
+            height: 55%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -235,7 +234,11 @@
             background: linear-gradient(transparent, white);
         }
 
-        .card-info { padding: 12px 16px 16px; }
+        .card-info {
+            padding: 12px 16px 16px;
+            overflow-y: auto;
+            flex: 1;
+        }
 
         .card-name-row {
             display: flex;
@@ -284,7 +287,30 @@
             color: #555;
         }
 
-        /* ── Stamps ──────────────────────────────────────── */
+        .card-end-message {
+            font-size: 1.1em;
+            color: #0f0f0f;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .card-end-cta {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .card-end-cta:hover { transform: scale(1.05); }
+
+        /* ── Stamps ──────────────────────────────────────– */
         .stamp {
             position: absolute;
             top: 20px;
@@ -315,7 +341,13 @@
             transform: rotate(20deg);
         }
 
-        /* ── Action bar ──────────────────────────────────── */
+        /* ── Position classes ────────────────────────────– */
+        .card-pos-0 { z-index: 10; transform: none; opacity: 1; }
+        .card-pos-1 { z-index: 2; transform: scale(0.96) translateY(8px); opacity: 1; }
+        .card-pos-2 { z-index: 1; transform: scale(0.92) translateY(16px); opacity: 1; }
+        .card-pos-off { z-index: 0; transform: scale(0.88) translateY(24px); opacity: 0; pointer-events: none; }
+
+        /* ── Action bar ──────────────────────────────────– */
         .action-bar {
             flex-shrink: 0;
             display: flex;
@@ -326,6 +358,8 @@
             background: white;
             border-top: 1px solid rgba(0,0,0,0.06);
         }
+
+        .action-bar.hidden { opacity: 0; pointer-events: none; }
 
         .action-btn {
             border-radius: 50%;
@@ -367,7 +401,7 @@
             box-shadow: 0 4px 18px rgba(33,208,122,0.14);
         }
 
-        /* ── Overlay screens ─────────────────────────────── */
+        /* ── Overlay screens ─────────────────────────────– */
         .overlay {
             position: absolute;
             inset: 0;
@@ -489,7 +523,7 @@
         .match-cta {
             display: block;
             background: white;
-            color: #fd297b;
+            color: #6366f1;
             padding: 14px 28px;
             border-radius: 50px;
             font-size: 0.93em;
@@ -515,7 +549,26 @@
             padding: 4px;
         }
 
-        /* ── Card animation ──────────────────────────────── */
+        /* ── Toast ───────────────────────────────────────– */
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.88);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            z-index: 60;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.show { opacity: 1; }
+
+        /* ── Card animation ──────────────────────────────– */
         .card-exit {
             transition: transform 0.44s ease-in, opacity 0.4s ease-in !important;
         }
@@ -528,7 +581,7 @@
 
         .hinting { animation: cardHint 0.65s ease-in-out; }
 
-        /* ── Confetti ────────────────────────────────────── */
+        /* ── Confetti ────────────────────────────────────– */
         .bit {
             position: fixed;
             top: -14px;
@@ -563,49 +616,18 @@
 
     <!-- Cards -->
     <div class="card-area">
-        <div class="card-stack">
-            <div class="ghost ghost-1"></div>
-            <div class="ghost ghost-2"></div>
-
-            <div class="profile-card" id="card">
-                <div class="stamp stamp-nope" id="stamp-nope">Nope</div>
-                <div class="stamp stamp-like" id="stamp-like">Like</div>
-
-                <div class="card-photo">
-                    😄
-                    <div class="photo-shine"></div>
-                    <div class="photo-fade"></div>
-                </div>
-
-                <div class="card-info">
-                    <div class="card-name-row">
-                        <span class="card-name">Jay</span>
-                        <span class="card-age">27</span>
-                    </div>
-                    <div class="card-meta">
-                        <span class="active-dot"></span>
-                        Recently active · 2 miles away
-                    </div>
-                    <div class="card-bio">
-                        Put a URL in my Hinge bio and you actually typed it in.<br>So. Here we are. Hi.
-                    </div>
-                    <div class="card-tags">
-                        <span class="tag">☕ Coffee person</span>
-                        <span class="tag">😂 Accidentally funny</span>
-                        <span class="tag">🎵 Music nerd</span>
-                        <span class="tag">🐶 Dog person</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="card-stack" id="card-stack"></div>
     </div>
 
     <!-- Action buttons -->
-    <div class="action-bar">
+    <div class="action-bar" id="action-bar">
         <button class="action-btn btn-nope" id="btn-nope">✕</button>
         <button class="action-btn btn-star" id="btn-star">★</button>
         <button class="action-btn btn-like" id="btn-like">♥</button>
     </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
 
     <!-- Nope screen -->
     <div class="overlay nope-overlay" id="nope-screen">
@@ -635,76 +657,228 @@
 
 </div>
 <script>
-    // ── Splash dismiss ────────────────────────────────────────────
-    const splash = document.getElementById('splash');
-    const card   = document.getElementById('card');
+    // ── Card data ─────────────────────────────────────────────────
+    const CARDS = [
+        {
+            type: 'profile',
+            id: 'jay',
+            emoji: '😄',
+            bg: 'linear-gradient(145deg, #667eea 0%, #764ba2 55%, #6366f1 100%)',
+            name: 'Jay',
+            age: 27,
+            meta: 'Recently active · 2 miles away',
+            bio: 'Put a URL in my Hinge bio and you actually typed it in. So. Here we are. Hi.',
+            tags: ['☕ Coffee person', '😂 Accidentally funny', '🎵 Music nerd', '🐶 Dog person']
+        },
+        {
+            type: 'profile',
+            id: 'gerald',
+            emoji: '🌵',
+            bg: 'linear-gradient(145deg, #4ade80 0%, #059669 100%)',
+            name: 'Gerald',
+            age: 4,
+            meta: 'Watered 3 days ago · very close',
+            bio: "Low maintenance. Won't text first but also won't leave a wet towel on the bed. Passionate about photosynthesis.",
+            tags: ['🌞 Indirect sunlight', '💧 Thrives on neglect', '🌵 Definitely a cactus']
+        },
+        {
+            type: 'end'
+        }
+    ];
 
-    setTimeout(() => {
-        splash.classList.add('fade-out');
-        setTimeout(() => {
-            splash.remove();
-            // subtle hint wiggle so user knows the card is swipeable
-            card.classList.add('hinting');
-            card.addEventListener('animationend', () => card.classList.remove('hinting'), { once: true });
-        }, 580);
-    }, 2600);
-
-    // ── Swipe logic ───────────────────────────────────────────────
-    const stampNope  = document.getElementById('stamp-nope');
-    const stampLike  = document.getElementById('stamp-like');
-    const matchScreen = document.getElementById('match-screen');
-    const nopeScreen  = document.getElementById('nope-screen');
-
-    let sx = 0, sy = 0, dx = 0, dy = 0, dragging = false;
+    let currentIdx = 0;
+    let dragCard = null;
+    let sx = 0, sy = 0, dx = 0, dy = 0;
 
     const cx = e => e.touches ? e.touches[0].clientX : e.clientX;
     const cy = e => e.touches ? e.touches[0].clientY : e.clientY;
 
-    card.addEventListener('mousedown',  e => { dragging = true; sx = cx(e); sy = cy(e); card.style.transition = 'none'; });
-    card.addEventListener('touchstart', e => { dragging = true; sx = cx(e); sy = cy(e); card.style.transition = 'none'; }, { passive: true });
+    const cardStack = document.getElementById('card-stack');
+    const splash = document.getElementById('splash');
+    const toast = document.getElementById('toast');
+    const actionBar = document.getElementById('action-bar');
+    const matchScreen = document.getElementById('match-screen');
+    const nopeScreen = document.getElementById('nope-screen');
+
+    // ── Build DOM ──────────────────────────────────────────────────
+    function buildCard(data, idx) {
+        const card = document.createElement('div');
+        card.className = 'profile-card';
+        card.dataset.index = idx;
+
+        if (data.type === 'end') {
+            card.classList.add('is-end');
+            card.innerHTML = `
+                <div class="card-info" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div class="card-end-message">
+                        you've swiped through a person and a cactus. there's only one real option here.
+                    </div>
+                    <a href="https://hinge.co" class="card-end-cta">Go to Hinge →</a>
+                </div>
+            `;
+        } else {
+            card.innerHTML = `
+                <div class="stamp stamp-nope">Nope</div>
+                <div class="stamp stamp-like">Like</div>
+
+                <div class="card-photo" style="background: ${data.bg}">
+                    ${data.emoji}
+                    <div class="photo-shine"></div>
+                    <div class="photo-fade"></div>
+                </div>
+
+                <div class="card-info">
+                    <div class="card-name-row">
+                        <span class="card-name">${data.name}</span>
+                        <span class="card-age">${data.age}</span>
+                    </div>
+                    <div class="card-meta">
+                        <span class="active-dot"></span>
+                        ${data.meta}
+                    </div>
+                    <div class="card-bio">${data.bio}</div>
+                    <div class="card-tags">
+                        ${data.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Attach drag listeners to interactive cards
+            card.addEventListener('mousedown', onCardDown);
+            card.addEventListener('touchstart', onCardDown, { passive: true });
+        }
+
+        return card;
+    }
+
+    function initCards() {
+        cardStack.innerHTML = '';
+        CARDS.forEach((data, idx) => {
+            const card = buildCard(data, idx);
+            cardStack.appendChild(card);
+        });
+        updatePositions();
+    }
+
+    function updatePositions() {
+        const cards = cardStack.querySelectorAll('.profile-card');
+        cards.forEach((card, idx) => {
+            const relPos = idx - currentIdx;
+            if (relPos === 0) {
+                card.className = 'profile-card card-pos-0';
+            } else if (relPos === 1) {
+                card.className = 'profile-card card-pos-1';
+            } else if (relPos === 2) {
+                card.className = 'profile-card card-pos-2';
+            } else {
+                card.className = 'profile-card card-pos-off';
+            }
+        });
+    }
+
+    // ── Drag logic ─────────────────────────────────────────────────
+    function onCardDown(e) {
+        if (dragCard) return;
+        dragCard = this;
+        sx = cx(e);
+        sy = cy(e);
+        dragCard.style.transition = 'none';
+    }
 
     document.addEventListener('mousemove', onMove);
     document.addEventListener('touchmove', onMove, { passive: true });
 
     function onMove(e) {
-        if (!dragging) return;
+        if (!dragCard) return;
         dx = cx(e) - sx;
         dy = cy(e) - sy;
-        card.style.transform = `translateX(${dx}px) translateY(${dy * 0.12}px) rotate(${dx * 0.06}deg)`;
+        dragCard.style.transform = `translateX(${dx}px) translateY(${dy * 0.12}px) rotate(${dx * 0.06}deg)`;
         const r = Math.min(Math.abs(dx) / 75, 1);
-        stampNope.style.opacity = dx < -8 ? r : 0;
-        stampLike.style.opacity = dx >  8 ? r : 0;
+        const stampNope = dragCard.querySelector('.stamp-nope');
+        const stampLike = dragCard.querySelector('.stamp-like');
+        if (stampNope) stampNope.style.opacity = dx < -8 ? r : 0;
+        if (stampLike) stampLike.style.opacity = dx > 8 ? r : 0;
     }
 
-    document.addEventListener('mouseup',  release);
+    document.addEventListener('mouseup', release);
     document.addEventListener('touchend', release);
 
     function release() {
-        if (!dragging) return;
-        dragging = false;
-        card.style.transition = '';
-
-        if      (dx >  90) fly('right');
-        else if (dx < -90) fly('left');
-        else {
-            card.style.transform = '';
-            stampNope.style.opacity = 0;
-            stampLike.style.opacity = 0;
+        if (!dragCard) return;
+        dragCard.style.transition = '';
+        if (Math.abs(dx) > 90) {
+            fly(dragCard, dx > 0 ? 'right' : 'left');
+        } else {
+            dragCard.style.transform = '';
+            const stampNope = dragCard.querySelector('.stamp-nope');
+            const stampLike = dragCard.querySelector('.stamp-like');
+            if (stampNope) stampNope.style.opacity = 0;
+            if (stampLike) stampLike.style.opacity = 0;
         }
-        dx = 0; dy = 0;
+        dragCard = null;
+        dx = 0;
+        dy = 0;
     }
 
-    function fly(dir) {
+    function fly(card, dir) {
         card.classList.add('card-exit');
+        const stampNope = card.querySelector('.stamp-nope');
+        const stampLike = card.querySelector('.stamp-like');
         if (dir === 'right') {
-            stampLike.style.opacity = 1;
+            if (stampLike) stampLike.style.opacity = 1;
             card.style.transform = 'translateX(160vw) rotate(28deg)';
         } else {
-            stampNope.style.opacity = 1;
+            if (stampNope) stampNope.style.opacity = 1;
             card.style.transform = 'translateX(-160vw) rotate(-28deg)';
         }
         card.style.opacity = '0';
-        setTimeout(() => dir === 'right' ? showMatch() : showNope(), 440);
+        setTimeout(() => handleSwipeResult(dir), 440);
+    }
+
+    function handleSwipeResult(dir) {
+        const cardData = CARDS[currentIdx];
+
+        if (cardData.type === 'profile' && cardData.id === 'jay') {
+            if (dir === 'right') {
+                showMatch();
+            } else {
+                showNope();
+            }
+        } else {
+            // Non-Jay cards (Gerald or end): advance stack and show toast
+            const toastMsg = cardData.id === 'gerald'
+                ? `You swiped ${dir === 'right' ? 'right' : 'left'} on a cactus. Bold.`
+                : '';
+
+            advanceStack();
+            if (toastMsg) {
+                showToast(toastMsg);
+            }
+        }
+    }
+
+    function advanceStack() {
+        currentIdx++;
+        if (currentIdx >= CARDS.length) {
+            currentIdx = CARDS.length - 1;
+        }
+        updatePositions();
+        const cards = cardStack.querySelectorAll('.profile-card');
+        cards.forEach(card => {
+            card.classList.remove('card-exit');
+            card.style.cssText = '';
+        });
+
+        // Hide action bar on end card
+        if (currentIdx >= CARDS.length - 1) {
+            actionBar.classList.add('hidden');
+        }
+    }
+
+    function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
     function showMatch() {
@@ -716,23 +890,64 @@
         nopeScreen.classList.add('visible');
     }
 
-    function reset() {
+    function resetStack() {
         nopeScreen.classList.remove('visible');
-        card.classList.remove('card-exit');
-        card.style.cssText = '';
-        stampNope.style.opacity = 0;
-        stampLike.style.opacity = 0;
-        dx = 0; dy = 0;
+        currentIdx = 0;
+        actionBar.classList.remove('hidden');
+        updatePositions();
+        const cards = cardStack.querySelectorAll('.profile-card');
+        cards.forEach(card => {
+            card.classList.remove('card-exit');
+            card.style.cssText = '';
+        });
     }
 
-    // Buttons
-    document.getElementById('btn-nope').addEventListener('click', () => { stampNope.style.opacity = 1; setTimeout(() => fly('left'),  55); });
-    document.getElementById('btn-like').addEventListener('click', () => { stampLike.style.opacity = 1; setTimeout(() => fly('right'), 55); });
-    document.getElementById('btn-star').addEventListener('click', () => { stampLike.style.opacity = 1; setTimeout(() => fly('right'), 55); });
-    document.getElementById('btn-reconsider').addEventListener('click', reset);
+    // Button handlers
+    document.getElementById('btn-nope').addEventListener('click', () => {
+        const card = cardStack.querySelector('.card-pos-0');
+        if (card && !card.classList.contains('is-end')) {
+            const stampNope = card.querySelector('.stamp-nope');
+            if (stampNope) stampNope.style.opacity = 1;
+            setTimeout(() => fly(card, 'left'), 55);
+        }
+    });
+
+    document.getElementById('btn-like').addEventListener('click', () => {
+        const card = cardStack.querySelector('.card-pos-0');
+        if (card && !card.classList.contains('is-end')) {
+            const stampLike = card.querySelector('.stamp-like');
+            if (stampLike) stampLike.style.opacity = 1;
+            setTimeout(() => fly(card, 'right'), 55);
+        }
+    });
+
+    document.getElementById('btn-star').addEventListener('click', () => {
+        const card = cardStack.querySelector('.card-pos-0');
+        if (card && !card.classList.contains('is-end')) {
+            const stampLike = card.querySelector('.stamp-like');
+            if (stampLike) stampLike.style.opacity = 1;
+            setTimeout(() => fly(card, 'right'), 55);
+        }
+    });
+
+    document.getElementById('btn-reconsider').addEventListener('click', resetStack);
     document.getElementById('btn-skip').addEventListener('click', () => matchScreen.classList.remove('visible'));
 
-    // ── Confetti ──────────────────────────────────────────────────
+    // ── Splash dismiss ─────────────────────────────────────────────
+    setTimeout(() => {
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.remove();
+            initCards();
+            const card = cardStack.querySelector('.card-pos-0');
+            if (card) {
+                card.classList.add('hinting');
+                card.addEventListener('animationend', () => card.classList.remove('hinting'), { once: true });
+            }
+        }, 580);
+    }, 2600);
+
+    // ── Confetti ───────────────────────────────────────────────────
     function confetti() {
         const colors = ['#fd297b','#ff6036','#21d07a','#42d0f4','#ffd700','#a855f7','#fff'];
         const frame  = document.querySelector('.app-frame');
