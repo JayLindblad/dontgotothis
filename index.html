@@ -22,6 +22,7 @@
             --clr-bg-app:       #f7f7f8;
             --gradient-brand:   linear-gradient(135deg, var(--clr-primary), var(--clr-secondary));
             --gradient-splash:  linear-gradient(155deg, var(--clr-primary) 0%, var(--clr-secondary) 100%);
+            --gradient-accent:  linear-gradient(155deg, var(--clr-like) 0%, var(--clr-star) 100%);
         }
 
         html, body {
@@ -516,10 +517,8 @@
             align-items: center;
             justify-content: center;
             font-size: 2em;
-            background: rgba(255,255,255,0.15);
+            background: var(--gradient-accent);
         }
-
-        .avatar-me { background: linear-gradient(145deg, #667eea, #764ba2); }
 
         .match-pulse {
             font-size: 1.5em;
@@ -862,7 +861,7 @@
 
     <!-- Nope screen -->
     <div class="overlay nope-overlay" id="nope-screen">
-        <div class="nope-emoji">😅</div>
+        <div class="nope-emoji">😭</div>
         <div class="nope-title">okay, fair.</div>
         <p class="nope-text">Tbh the fact that you came here at all is surprising... thanks for stopping by :)</p>
         <button class="nope-btn" id="btn-reconsider">wait no, undo!</button>
@@ -877,7 +876,7 @@
         <div class="match-avatars">
             <div class="avatar">🫵</div>
             <div class="match-pulse">❤️</div>
-            <div class="avatar avatar-me">😄</div>
+            <div class="avatar">😄</div>
         </div>
         <p class="match-msg">
             You typed a random URL from a Hinge profile and swiped right on their fake card.<br><br>
@@ -951,7 +950,7 @@
             name: 'Jay',
             age: 26,
             meta: 'Recently active · 2 miles away',
-            bio: 'Put a URL in my Hinge bio and you actually typed it in. So. Here we are I guess.',
+            bio: 'I put a URL in my Hinge bio and you actually typed it in. So. Here we are I guess.',
             tags: ['🔄 Too many hobbies', '😭 Accidentally funny', '🎵 Sad girl music lover', '📸 Takes nice pictures']
         },
         {
