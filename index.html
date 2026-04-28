@@ -507,6 +507,8 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 20px;
+            position: relative;
+            overflow: visible;
         }
 
         .avatar {
@@ -546,6 +548,50 @@
 
         .avatar {
             overflow: visible; /* IMPORTANT with mask */
+        }
+
+        .avatar-wrap {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: visible;
+        }
+
+        .scribble {
+            position: absolute;
+            bottom: -26px; /* pushes it OUTSIDE avatar circle */
+            font-size: 0.7em;
+            font-weight: 700;
+            color: rgba(255,255,255,0.85);
+            font-family: "Comic Sans MS", "Bradley Hand", cursive;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        /* left avatar */
+        .scribble.you {
+            left: 50%;
+            transform: translateX(-50%) rotate(-8deg);
+        }
+
+        /* right avatar */
+        .scribble.me {
+            left: 50%;
+            transform: translateX(-50%) rotate(8deg);
+        }
+
+        /* optional little “hand-drawn arrow vibe” */
+        .scribble::before {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 2px;
+            background: rgba(255,255,255,0.7);
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            opacity: 0.7;
         }
 
         .match-pulse {
@@ -902,9 +948,19 @@
         <div class="match-title">Match! 🎉</div>
         <div class="match-sub">you went to the website AND swiped right, so</div>
         <div class="match-avatars">
-            <div class="avatar">🫵</div>
+
+            <div class="avatar-wrap">
+                <div class="avatar user">👩</div>
+                <div class="scribble you">you ↙</div>
+            </div>
+
             <div class="match-pulse">❤️</div>
-            <div class="avatar">😄</div>
+
+            <div class="avatar-wrap">
+                <div class="avatar me">👨</div>
+                <div class="scribble me">me ↘</div>
+            </div>
+
         </div>
         <p class="match-msg">
             You typed a random URL from a Hinge profile and swiped right on their fake card.<br><br>
