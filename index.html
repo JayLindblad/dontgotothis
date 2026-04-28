@@ -510,14 +510,42 @@
         }
 
         .avatar {
-            width: 76px; height: 76px;
+            width: 76px;
+            height: 76px;
             border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.45);
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             font-size: 2em;
+
+            position: relative;
+
+            border: 3px solid rgba(255,255,255,0.45);
+
+            /* 🔥 key part: prevent border clipping artifacts */
+            -webkit-mask-image: radial-gradient(circle, black 98%, transparent 100%);
+            mask-image: radial-gradient(circle, black 98%, transparent 100%);
+        }
+
+        .avatar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            border-radius: 50%;
             background: var(--gradient-accent);
+
+            z-index: -1;
+        }
+
+        .avatar {
+            z-index: 0;
+        }
+
+        .avatar {
+            overflow: visible; /* IMPORTANT with mask */
         }
 
         .match-pulse {
@@ -894,24 +922,17 @@
 
             <div class="modal-section">
                 <div class="modal-section-title">Bio</div>
-                <div class="modal-bio" id="about-bio">
-                    [Your bio goes here — a bit more about yourself, what you're looking for, your vibe, etc.]
-                </div>
+                <div class="modal-bio" id="about-bio"></div>
             </div>
 
             <div class="modal-section">
                 <div class="modal-section-title">Interests & Hobbies</div>
-                <div class="interests-list" id="interests-list">
-                    <span class="interest-tag">Coffee</span>
-                    <span class="interest-tag">Music</span>
-                    <span class="interest-tag">Dogs</span>
-                    <span class="interest-tag">[Add more]</span>
-                </div>
+                <div class="interests-list" id="interests-list"></div>
             </div>
 
             <div class="modal-section">
-                <button class="modal-cta" onclick="window.location.href='https://hinge.co'">
-                    Message me on Hinge →
+                <button class="modal-cta" onclick="window.location.href='imessage://6106131898'">
+                    say hi →
                 </button>
             </div>
         </div>
