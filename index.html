@@ -506,7 +506,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 116px;
             position: relative;
             overflow: visible;
         }
@@ -558,40 +558,29 @@
             overflow: visible;
         }
 
-        .scribble {
+        .arrow-label-wrap {
             position: absolute;
-            bottom: -26px; /* pushes it OUTSIDE avatar circle */
-            font-size: 0.7em;
-            font-weight: 700;
-            color: rgba(255,255,255,0.85);
-            font-family: "Comic Sans MS", "Bradley Hand", cursive;
-            white-space: nowrap;
+            bottom: -108px;
+            left: 50%;
+            transform: translateX(-50%);
             pointer-events: none;
         }
 
-        /* left avatar */
-        .scribble.you {
-            left: 50%;
-            transform: translateX(-50%) rotate(-8deg);
+        .arrow-label {
+            display: block;
+            overflow: visible;
+            animation: squiggle 0.4s linear infinite;
         }
 
-        /* right avatar */
-        .scribble.me {
-            left: 50%;
-            transform: translateX(-50%) rotate(8deg);
-        }
+        .arrow-you { animation-delay: 0s; }
+        .arrow-me  { animation-delay: 0.13s; }
 
-        /* optional little “hand-drawn arrow vibe” */
-        .scribble::before {
-            content: "";
-            position: absolute;
-            width: 22px;
-            height: 2px;
-            background: rgba(255,255,255,0.7);
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-15deg);
-            opacity: 0.7;
+        @keyframes squiggle {
+            0%   { filter: url(#sq0); }
+            25%  { filter: url(#sq1); }
+            50%  { filter: url(#sq2); }
+            75%  { filter: url(#sq3); }
+            100% { filter: url(#sq4); }
         }
 
         .match-pulse {
@@ -610,6 +599,8 @@
             line-height: 1.6;
             max-width: 270px;
             margin-bottom: 22px;
+            margin-top: 22px;
+
         }
 
         .match-cta {
@@ -901,6 +892,18 @@
     </style>
 </head>
 <body>
+
+<!-- Squigglevision filters: 5 seeds → rapid CSS cycle makes lines look hand-drawn -->
+<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="sq0"><feTurbulence baseFrequency="0.025" numOctaves="2" seed="0" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="sq1"><feTurbulence baseFrequency="0.025" numOctaves="2" seed="1" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="sq2"><feTurbulence baseFrequency="0.025" numOctaves="2" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="sq3"><feTurbulence baseFrequency="0.025" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="sq4"><feTurbulence baseFrequency="0.025" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/></filter>
+  </defs>
+</svg>
+
 <div class="app-frame">
 
     <!-- Splash -->
@@ -950,15 +953,27 @@
         <div class="match-avatars">
 
             <div class="avatar-wrap">
-                <div class="avatar user">👩</div>
-                <div class="scribble you">you ↙</div>
+                <div class="avatar user">🧍‍♀️</div>
+                <div class="arrow-label-wrap">
+                    <svg class="arrow-label arrow-you" viewBox="0 0 110 110" width="110" height="110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="82" y="106" font-family="'Comic Sans MS','Bradley Hand',cursive" font-size="16" font-weight="bold" fill="rgba(255,255,255,0.93)" text-anchor="middle">you</text>
+                        <path d="M70 82 C22 62, 32 24, 48 6" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M48 6 L35 10 M48 6 L45 20" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
             </div>
 
             <div class="match-pulse">❤️</div>
 
             <div class="avatar-wrap">
-                <div class="avatar me">👨</div>
-                <div class="scribble me">me ↘</div>
+                <div class="avatar me">🧍‍♂️</div>
+                <div class="arrow-label-wrap">
+                    <svg class="arrow-label arrow-me" viewBox="0 0 110 110" width="110" height="110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="28" y="106" font-family="'Comic Sans MS','Bradley Hand',cursive" font-size="16" font-weight="bold" fill="rgba(255,255,255,0.93)" text-anchor="middle">me</text>
+                        <path d="M40 82 C88 62, 78 24, 62 6" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M62 6 L65 20 M62 6 L75 10" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
             </div>
 
         </div>
@@ -1442,8 +1457,8 @@
     const SUPABASE_KEY = '***REMOVED***.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVneXR6Z3Z4c2VpZ3VoY3ZtdmRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjk0ODgsImV4cCI6MjA5MjkwNTQ4OH0.ToludVmB4d462YxNTUXiMEirUYX1v1tca0hiqV-lnb8';
 
     // ── Editable content (update these with your info) ──────────────
-    const PROFILE_BIO = '[Your bio goes here — a bit more about yourself, what you\'re looking for, your vibe, etc.]';
-    const PROFILE_INTERESTS = ['Coffee', 'Music', 'Dogs', 'Your interests here'];
+    const PROFILE_BIO = 'People call me an extrovert but I spend a shocking amount of time at home dreaming up stuff like this 😭 but also I wanna make friends so shoot me a text and maybe we can grab a drink or go out somewhere!';
+    const PROFILE_INTERESTS = ['Graphic Design', 'Music', 'Dogs (ask me about Kodi)', 'Computers'];
 
     // ── Modal controls ─────────────────────────────────────────────
     function openModal(modalId) {
