@@ -9,9 +9,9 @@
 
         /* ── Color tokens ────────────────────────────────── */
         :root {
-            --clr-primary:      #6366f1;
-            --clr-secondary:    #3b82f6;
-            --clr-nope:         #ff4b4b;
+            --clr-primary:      #f97162;
+            --clr-secondary:    #f72334;
+            --clr-nope:         #a11f1f;
             --clr-nope-tint:    #ffd0d0;
             --clr-like:         #21d07a;
             --clr-like-tint:    #bdf0d6;
@@ -173,8 +173,8 @@
             border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
-        .bar-icon { font-size: 1.3em; opacity: 0.18; cursor: pointer; transition: opacity 0.2s; }
-        .bar-icon:hover { opacity: 0.35; }
+        .bar-icon { font-size: 1.3em; opacity: 0.5; cursor: pointer; transition: opacity 0.2s; }
+        .bar-icon:hover { opacity: 1; }
 
         .app-logo {
             font-size: 1.2em;
@@ -820,8 +820,8 @@
 
     <!-- Splash -->
     <div id="splash">
-        <span class="splash-icon">💕</span>
-        <div class="splash-name">dontgotothis</div>
+        <span class="splash-icon">❤️</span>
+        <div class="splash-name">dontgotothis.site</div>
         <div class="splash-tagline">swipe wisely.</div>
         <div class="splash-dots"><span></span><span></span><span></span></div>
     </div>
@@ -918,11 +918,11 @@
                 </div>
 
                 <div class="comment-form">
-                    <input type="text" id="comment-name" class="comment-input" placeholder="Your name">
+                    <input type="text" id="comment-name" class="comment-input" placeholder="Your (first) name">
                     <textarea id="comment-message" class="comment-input" placeholder="Leave a message..." rows="4" style="resize: vertical;"></textarea>
                     <button id="comment-submit" class="comment-submit">Post message</button>
                 </div>
-                <div id="comment-error" style="display: none;" class="error"></div>
+                <div id="comment-error" style="display: none; margin-top: 10px;" class="error"></div>
             </div>
         </div>
     </div>
@@ -937,10 +937,10 @@
             emoji: '😄',
             bg: 'linear-gradient(145deg, #667eea 0%, #764ba2 55%, #6366f1 100%)',
             name: 'Jay',
-            age: 27,
+            age: 26,
             meta: 'Recently active · 2 miles away',
-            bio: 'Put a URL in my Hinge bio and you actually typed it in. So. Here we are. Hi.',
-            tags: ['☕ Coffee person', '😂 Accidentally funny', '🎵 Music nerd', '🐶 Dog person']
+            bio: 'Put a URL in my Hinge bio and you actually typed it in. So. Here we are I guess.',
+            tags: ['🔄 Too many hobbies', '😭 Accidentally funny', '🎵 Sad girl music lover', '📸 Takes nice pictures']
         },
         {
             type: 'profile',
@@ -1084,7 +1084,7 @@
                     <div class="card-end-message">
                         you've swiped through a person, a cactus, dying plants, appliances, furniture, and your own regrets. pretty sure I'm your best option.
                     </div>
-                    <a href="https://hinge.co" class="card-end-cta">Go to Hinge →</a>
+                    <a href="imessage://6106131898" class="card-end-cta">say hi →</a>
                 </div>
             `;
         } else {
