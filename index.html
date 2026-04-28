@@ -506,7 +506,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 80px;
             position: relative;
             overflow: visible;
         }
@@ -558,40 +558,31 @@
             overflow: visible;
         }
 
-        .scribble {
+        .arrow-label-wrap {
             position: absolute;
-            bottom: -26px; /* pushes it OUTSIDE avatar circle */
-            font-size: 0.7em;
-            font-weight: 700;
-            color: rgba(255,255,255,0.85);
-            font-family: "Comic Sans MS", "Bradley Hand", cursive;
-            white-space: nowrap;
+            bottom: -66px;
+            left: 50%;
+            transform: translateX(-50%);
             pointer-events: none;
         }
 
-        /* left avatar */
-        .scribble.you {
-            left: 50%;
-            transform: translateX(-50%) rotate(-8deg);
+        .arrow-label {
+            display: block;
+            overflow: visible;
+            animation: arrowWiggle 2.6s ease-in-out infinite;
+            transform-origin: 50% 12%;
         }
 
-        /* right avatar */
-        .scribble.me {
-            left: 50%;
-            transform: translateX(-50%) rotate(8deg);
-        }
+        .arrow-you { animation-delay: 0s; }
+        .arrow-me  { animation-delay: 0.6s; }
 
-        /* optional little “hand-drawn arrow vibe” */
-        .scribble::before {
-            content: "";
-            position: absolute;
-            width: 22px;
-            height: 2px;
-            background: rgba(255,255,255,0.7);
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-15deg);
-            opacity: 0.7;
+        @keyframes arrowWiggle {
+            0%   { transform: rotate(-4deg); }
+            20%  { transform: rotate(3deg); }
+            40%  { transform: rotate(-2deg); }
+            60%  { transform: rotate(3.5deg); }
+            80%  { transform: rotate(-3deg); }
+            100% { transform: rotate(-4deg); }
         }
 
         .match-pulse {
@@ -951,14 +942,26 @@
 
             <div class="avatar-wrap">
                 <div class="avatar user">👩</div>
-                <div class="scribble you">you ↙</div>
+                <div class="arrow-label-wrap">
+                    <svg class="arrow-label arrow-you" viewBox="0 0 84 66" width="84" height="66" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="65" y="57" font-family="'Comic Sans MS','Bradley Hand',cursive" font-size="16" font-weight="bold" fill="rgba(255,255,255,0.93)" text-anchor="middle">you</text>
+                        <path d="M52 53 C42 43, 29 30, 21 12" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12 L12 23 M21 12 L31 19" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
             </div>
 
             <div class="match-pulse">❤️</div>
 
             <div class="avatar-wrap">
                 <div class="avatar me">👨</div>
-                <div class="scribble me">me ↘</div>
+                <div class="arrow-label-wrap">
+                    <svg class="arrow-label arrow-me" viewBox="0 0 84 66" width="84" height="66" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <text x="19" y="57" font-family="'Comic Sans MS','Bradley Hand',cursive" font-size="16" font-weight="bold" fill="rgba(255,255,255,0.93)" text-anchor="middle">me</text>
+                        <path d="M32 53 C42 43, 55 30, 63 12" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M63 12 L72 23 M63 12 L53 19" stroke="rgba(255,255,255,0.86)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
             </div>
 
         </div>
