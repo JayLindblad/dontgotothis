@@ -542,6 +542,11 @@
             z-index: -1;
         }
 
+        .user::before {
+            background: linear-gradient(45deg, #8db4ff, #ffadad);
+
+        }
+
         .avatar {
             z-index: 0;
         }
@@ -889,6 +894,10 @@
             font-size: 0.85em;
             margin-bottom: 10px;
         }
+
+        .notextdec {
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -1183,11 +1192,12 @@
         if (data.type === 'end') {
             card.classList.add('is-end');
             card.innerHTML = `
-                <div class="card-info" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="card-info" style="display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;">
                     <div class="card-end-message">
                         you've swiped through a person, a cactus, dying plants, appliances, furniture, and your own regrets. pretty sure I'm your best option.
                     </div>
                     <a href="imessage://6106131898" class="card-end-cta">say hi →</a>
+                    <a href="https://everyoneweknow.party" class="notextdec"> <div class="avatar user" style="border: 3px solid rgb(255 211 46 / 90%); style="text-decoration: none;">🎉</div></a>
                 </div>
             `;
         } else {
